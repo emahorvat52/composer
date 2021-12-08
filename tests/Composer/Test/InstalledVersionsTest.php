@@ -26,7 +26,7 @@ class InstalledVersionsTest extends TestCase
      */
     private $root;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         // disable multiple-ClassLoader-based checks of InstalledVersions by making it seem like no
         // class loaders are registered
@@ -36,7 +36,7 @@ class InstalledVersionsTest extends TestCase
         $prop->setValue(array());
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $prop = new \ReflectionProperty('Composer\Autoload\ClassLoader', 'registeredLoaders');
         $prop->setAccessible(true);
@@ -44,7 +44,7 @@ class InstalledVersionsTest extends TestCase
         InstalledVersions::reload(null); // @phpstan-ignore-line
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->root = $this->getUniqueTmpDirectory();
 

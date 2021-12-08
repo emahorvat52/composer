@@ -34,7 +34,7 @@ class ZipDownloaderTest extends TestCase
     /** @var string */
     private $filename;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->testDir = $this->getUniqueTmpDirectory();
         $this->io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
@@ -47,7 +47,7 @@ class ZipDownloaderTest extends TestCase
         file_put_contents($this->filename, 'zip');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $fs = new Filesystem;
         $fs->removeDirectory($this->testDir);
