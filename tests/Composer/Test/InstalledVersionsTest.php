@@ -208,7 +208,7 @@ class InstalledVersionsTest extends TestCase
 
     public function testGetVersionOutOfBounds()
     {
-        $this->setExpectedException('OutOfBoundsException');
+        self::expectException('OutOfBoundsException');
         InstalledVersions::getVersion('not/installed');
     }
 

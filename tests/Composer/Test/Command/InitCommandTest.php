@@ -90,14 +90,14 @@ class InitCommandTest extends TestCase
     public function testParseEmptyAuthorString()
     {
         $command = new InitCommand;
-        $this->setExpectedException('InvalidArgumentException');
+        self::expectException('InvalidArgumentException');
         $command->parseAuthorString('');
     }
 
     public function testParseAuthorStringWithInvalidEmail()
     {
         $command = new InitCommand;
-        $this->setExpectedException('InvalidArgumentException');
+        self::expectException('InvalidArgumentException');
         $command->parseAuthorString('John Smith <john>');
     }
 
