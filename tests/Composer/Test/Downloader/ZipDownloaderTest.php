@@ -119,7 +119,7 @@ class ZipDownloaderTest extends TestCase
 
         $this->setPrivateProperty('hasZipArchive', true);
         $downloader = new MockedZipDownloader($this->io, $this->config, $this->httpDownloader);
-        $zipArchive = $this->getMockBuilder('ZipArchive')->onlyMethods(['open', 'extractTo'])->getMock();
+        $zipArchive = $this->getMockBuilder('ZipArchive')->getMock();
         $zipArchive->expects($this->once())
             ->method('open')
             ->will($this->returnValue(true));
@@ -142,10 +142,10 @@ class ZipDownloaderTest extends TestCase
         $this->setPrivateProperty('hasZipArchive', true);
         $downloader = new MockedZipDownloader($this->io, $this->config, $this->httpDownloader);
         $zipArchive = $this->getMockBuilder('ZipArchive')->getMock();
-        $zipArchive->expects($this->at(0))
+        $zipArchive->expects($this->once())
             ->method('open')
             ->will($this->returnValue(true));
-        $zipArchive->expects($this->at(1))
+        $zipArchive->expects($this->once())
             ->method('extractTo')
             ->will($this->throwException(new \ErrorException('Not a directory')));
 
@@ -163,10 +163,10 @@ class ZipDownloaderTest extends TestCase
         $this->setPrivateProperty('hasZipArchive', true);
         $downloader = new MockedZipDownloader($this->io, $this->config, $this->httpDownloader);
         $zipArchive = $this->getMockBuilder('ZipArchive')->getMock();
-        $zipArchive->expects($this->at(0))
+        $zipArchive->expects($this->once())
             ->method('open')
             ->will($this->returnValue(true));
-        $zipArchive->expects($this->at(1))
+        $zipArchive->expects($this->once())
             ->method('extractTo')
             ->will($this->returnValue(true));
 
@@ -194,7 +194,7 @@ class ZipDownloaderTest extends TestCase
             ->will($this->returnValue('output'));
 
         $processExecutor = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
-        $processExecutor->expects($this->at(0))
+        $processExecutor->expects($this->once())
             ->method('executeAsync')
             ->will($this->returnValue(\React\Promise\resolve($procMock)));
 
@@ -221,7 +221,7 @@ class ZipDownloaderTest extends TestCase
             ->will($this->returnValue('output'));
 
         $processExecutor = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
-        $processExecutor->expects($this->at(0))
+        $processExecutor->expects($this->once())
             ->method('executeAsync')
             ->will($this->returnValue(\React\Promise\resolve($procMock)));
 
@@ -251,15 +251,15 @@ class ZipDownloaderTest extends TestCase
             ->will($this->returnValue('output'));
 
         $processExecutor = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
-        $processExecutor->expects($this->at(0))
+        $processExecutor->expects($this->once())
             ->method('executeAsync')
             ->will($this->returnValue(\React\Promise\resolve($procMock)));
 
         $zipArchive = $this->getMockBuilder('ZipArchive')->getMock();
-        $zipArchive->expects($this->at(0))
+        $zipArchive->expects($this->once())
             ->method('open')
             ->will($this->returnValue(true));
-        $zipArchive->expects($this->at(1))
+        $zipArchive->expects($this->once())
             ->method('extractTo')
             ->will($this->returnValue(true));
 
@@ -291,15 +291,15 @@ class ZipDownloaderTest extends TestCase
             ->will($this->returnValue('output'));
 
         $processExecutor = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
-        $processExecutor->expects($this->at(0))
+        $processExecutor->expects($this->once())
           ->method('executeAsync')
           ->will($this->returnValue(\React\Promise\resolve($procMock)));
 
         $zipArchive = $this->getMockBuilder('ZipArchive')->getMock();
-        $zipArchive->expects($this->at(0))
+        $zipArchive->expects($this->once())
           ->method('open')
           ->will($this->returnValue(true));
-        $zipArchive->expects($this->at(1))
+        $zipArchive->expects($this->once())
           ->method('extractTo')
           ->will($this->returnValue(false));
 
