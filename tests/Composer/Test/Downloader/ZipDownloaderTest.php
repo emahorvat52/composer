@@ -47,8 +47,9 @@ class ZipDownloaderTest extends TestCase
         file_put_contents($this->filename, 'zip');
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
+        parent::tearDown();
         $fs = new Filesystem;
         $fs->removeDirectory($this->testDir);
         $this->setPrivateProperty('hasZipArchive', null);
