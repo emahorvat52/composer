@@ -323,8 +323,7 @@ class ArrayRepository implements RepositoryInterface
      *
      * @return int Number of packages
      */
-    #[\ReturnTypeWillChange]
-    public function count()
+    public function count(): int
     {
         if (null === $this->packages) {
             $this->initialize();
