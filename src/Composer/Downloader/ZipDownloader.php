@@ -171,8 +171,6 @@ class ZipDownloader extends ArchiveDownloader
                     return $tryFallback(new \RuntimeException('Failed to extract '.$package->getName().': ('.$process->getExitCode().') '.$command."\n\n".$output));
                 }
             });
-        } catch (\Exception $e) {
-            return $tryFallback($e);
         } catch (\Throwable $e) {
             return $tryFallback($e);
         }
@@ -211,8 +209,6 @@ class ZipDownloader extends ArchiveDownloader
             }
         } catch (\ErrorException $e) {
             $processError = new \RuntimeException('The archive may contain identical file names with different capitalization (which fails on case insensitive filesystems): '.$e->getMessage(), 0, $e);
-        } catch (\Exception $e) {
-            $processError = $e;
         } catch (\Throwable $e) {
             $processError = $e;
         }
