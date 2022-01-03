@@ -93,7 +93,6 @@ class AutoloadGeneratorTest extends TestCase
     protected function setUp(): void
     {
         $this->fs = new Filesystem;
-        $that = $this;
 
         $this->workingDir = $this->getUniqueTmpDirectory();
         $this->vendorDir = $this->workingDir.DIRECTORY_SEPARATOR.'composer-test-autoload';
@@ -102,8 +101,8 @@ class AutoloadGeneratorTest extends TestCase
         $this->config = $this->getMockBuilder('Composer\Config')->getMock();
 
         $this->configValueMap = array(
-            'vendor-dir' => function () use ($that) {
-                return $that->vendorDir;
+            'vendor-dir' => function () {
+                return $this->vendorDir;
             },
             'platform-check' => function () {
                 return true;
@@ -112,10 +111,10 @@ class AutoloadGeneratorTest extends TestCase
 
         $this->config->expects($this->atLeastOnce())
             ->method('get')
-            ->will($this->returnCallback(function ($arg) use ($that) {
+            ->will($this->returnCallback(function ($arg) {
                 $ret = null;
-                if (isset($that->configValueMap[$arg])) {
-                    $ret = $that->configValueMap[$arg];
+                if (isset($this->configValueMap[$arg])) {
+                    $ret = $this->configValueMap[$arg];
                     if (is_callable($ret)) {
                         $ret = $ret();
                     }
@@ -132,10 +131,10 @@ class AutoloadGeneratorTest extends TestCase
             ->getMock();
         $this->im->expects($this->any())
             ->method('getInstallPath')
-            ->will($this->returnCallback(function ($package) use ($that) {
+            ->will($this->returnCallback(function ($package) {
                 $targetDir = $package->getTargetDir();
 
-                return $that->vendorDir.'/'.$package->getName() . ($targetDir ? '/'.$targetDir : '');
+                return $this->vendorDir.'/'.$package->getName() . ($targetDir ? '/'.$targetDir : '');
             }));
         $this->repository = $this->getMockBuilder('Composer\Repository\InstalledRepositoryInterface')->getMock();
         $this->repository->expects($this->any())
