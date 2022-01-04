@@ -413,7 +413,7 @@ class Locker
                 $this->virtualFileWritten = false;
             } else {
                 $this->virtualFileWritten = true;
-                $this->lockDataCache = JsonFile::parseJson(JsonFile::encode($lock, 448 & JsonFile::JSON_PRETTY_PRINT));
+                $this->lockDataCache = JsonFile::parseJson(JsonFile::encode($lock));
             }
 
             return true;
