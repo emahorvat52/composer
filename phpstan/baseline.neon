@@ -6531,6 +6531,16 @@ parameters:
 			path: ../src/Composer/Util/Http/CurlDownloader.php
 
 		-
+			message: "#^Constant CURLOPT_PROXY_CAINFO not found\\.$#"
+			count: 1
+			path: ../src/Composer/Util/Http/CurlDownloader.php
+
+		-
+			message: "#^Constant CURLOPT_PROXY_CAPATH not found\\.$#"
+			count: 1
+			path: ../src/Composer/Util/Http/CurlDownloader.php
+
+		-
 			message: "#^Construct empty\\(\\) is not allowed\\. Use more strict comparison\\.$#"
 			count: 3
 			path: ../src/Composer/Util/Http/CurlDownloader.php
