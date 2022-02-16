@@ -123,10 +123,7 @@ EOT
         ;
     }
 
-    /**
-     * @return int
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $config = Factory::createConfig();
         $io = $this->getIO();
@@ -142,11 +139,13 @@ EOT
         }
 
         if ($input->isInteractive() && $input->getOption('ask')) {
-            $parts = explode("/", strtolower($input->getArgument('package')), 2);
+            $package = $input->getArgument('package');
+            if (null === $package) {
+                throw new \RuntimeException('Not enough arguments (missing: "package").');
+            }
+            $parts = explode("/", strtolower($package), 2);
             $input->setArgument('directory', $io->ask('New project directory [<comment>'.array_pop($parts).'</comment>]: '));
         }
-
-        $ignorePlatformReqs = $input->getOption('ignore-platform-reqs') ?: ($input->getOption('ignore-platform-req') ?: false);
 
         return $this->installProject(
             $io,
@@ -164,7 +163,7 @@ EOT
             $input->getOption('no-scripts'),
             $input->getOption('no-progress'),
             $input->getOption('no-install'),
-            PlatformRequirementFilterFactory::fromBoolOrList($ignorePlatformReqs),
+            $this->getPlatformRequirementFilter($input),
             !$input->getOption('no-secure-http'),
             $input->getOption('add-repository')
         );
@@ -174,7 +173,7 @@ EOT
      * @param string|null               $packageName
      * @param string|null               $directory
      * @param string|null               $packageVersion
-     * @param string                    $stability
+     * @param string|null               $stability
      * @param bool                      $preferSource
      * @param bool                      $preferDist
      * @param bool                      $installDevPackages
