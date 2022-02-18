@@ -208,7 +208,6 @@ class PoolOptimizer
             $dependencyHash = $this->calculateDependencyHash($package);
 
             foreach ($package->getNames(false) as $packageName) {
-
                 if (!isset($this->requireConstraintsPerPackage[$packageName])) {
                     continue;
                 }
@@ -284,7 +283,7 @@ class PoolOptimizer
             'requires' => $package->getRequires(),
             'conflicts' => $package->getConflicts(),
             'replaces' => $package->getReplaces(),
-            'provides' => $package->getProvides()
+            'provides' => $package->getProvides(),
         );
 
         foreach ($hashRelevantLinks as $key => $links) {
