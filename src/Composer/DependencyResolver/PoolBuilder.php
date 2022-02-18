@@ -501,7 +501,7 @@ class PoolBuilder
      * @param string $name packageName
      * @return bool
      */
-    private function isRootRequire(Request $request, $name)
+    private function isRootRequire(Request $request, $name): bool
     {
         $rootRequires = $request->getRequires();
 
@@ -512,7 +512,7 @@ class PoolBuilder
      * @param  string $name
      * @return string[]
      */
-    private function getSkippedRootRequires(Request $request, $name)
+    private function getSkippedRootRequires(Request $request, $name): array
     {
         if (!isset($this->skippedLoad[$name])) {
             return array();
@@ -555,7 +555,7 @@ class PoolBuilder
      *
      * @return bool
      */
-    private function isUpdateAllowed(BasePackage $package)
+    private function isUpdateAllowed(BasePackage $package): bool
     {
         foreach ($this->updateAllowList as $pattern => $void) {
             $patternRegexp = BasePackage::packageNameToRegexp($pattern);
@@ -686,7 +686,7 @@ class PoolBuilder
     /**
      * @return Pool
      */
-    private function runOptimizer(Request $request, Pool $pool)
+    private function runOptimizer(Request $request, Pool $pool): Pool
     {
         if (null === $this->poolOptimizer) {
             return $pool;

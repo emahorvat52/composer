@@ -798,7 +798,7 @@ class Installer
      *
      * @phpstan-param list<array{package: string, version: string, alias: string, alias_normalized: string}> $rootAliases
      */
-    private function createRepositorySet($forUpdate, PlatformRepository $platformRepo, array $rootAliases = array(), $lockedRepository = null)
+    private function createRepositorySet($forUpdate, PlatformRepository $platformRepo, array $rootAliases = array(), $lockedRepository = null): RepositorySet
     {
         if ($forUpdate) {
             $minimumStability = $this->package->getMinimumStability();
@@ -867,7 +867,7 @@ class Installer
      *
      * @return DefaultPolicy
      */
-    private function createPolicy($forUpdate)
+    private function createPolicy($forUpdate): DefaultPolicy
     {
         $preferStable = null;
         $preferLowest = null;
@@ -891,7 +891,7 @@ class Installer
      * @param RootPackageInterface&BasePackage $rootPackage
      * @return Request
      */
-    private function createRequest(RootPackageInterface $rootPackage, PlatformRepository $platformRepo, LockArrayRepository $lockedRepository = null)
+    private function createRequest(RootPackageInterface $rootPackage, PlatformRepository $platformRepo, LockArrayRepository $lockedRepository = null): Request
     {
         $request = new Request($lockedRepository);
 
@@ -962,7 +962,7 @@ class Installer
      *
      * @phpstan-return list<array{package: string, version: string, alias: string, alias_normalized: string}>
      */
-    private function getRootAliases($forUpdate)
+    private function getRootAliases($forUpdate): array
     {
         if ($forUpdate) {
             $aliases = $this->package->getAliases();
@@ -978,7 +978,7 @@ class Installer
      *
      * @return array<string, string>
      */
-    private function extractPlatformRequirements(array $links)
+    private function extractPlatformRequirements(array $links): array
     {
         $platformReqs = array();
         foreach ($links as $link) {
@@ -1018,7 +1018,7 @@ class Installer
     /**
      * @return PoolOptimizer|null
      */
-    private function createPoolOptimizer(PolicyInterface $policy)
+    private function createPoolOptimizer(PolicyInterface $policy): ?PoolOptimizer
     {
         // Not the best architectural decision here, would need to be able
         // to configure from the outside of Installer but this is only

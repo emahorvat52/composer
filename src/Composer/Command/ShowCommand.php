@@ -916,7 +916,7 @@ EOT
      * @param array<string, string> $versions
      * @return array<string, string|string[]|null>
      */
-    private function appendVersions($json, array $versions)
+    private function appendVersions($json, array $versions): array
     {
         uasort($versions, 'version_compare');
         $versions = array_keys(array_reverse($versions));
@@ -929,7 +929,7 @@ EOT
      * @param array<string, string|string[]|null> $json
      * @return array<string, string|string[]|null>
      */
-    private function appendLicenses($json, CompletePackageInterface $package)
+    private function appendLicenses($json, CompletePackageInterface $package): array
     {
         if ($licenses = $package->getLicense()) {
             $spdxLicenses = new SpdxLicenses();
@@ -956,7 +956,7 @@ EOT
      * @param array<string, string|string[]|null> $json
      * @return array<string, string|string[]|null>
      */
-    private function appendAutoload($json, CompletePackageInterface $package)
+    private function appendAutoload($json, CompletePackageInterface $package): array
     {
         if ($package->getAutoload()) {
             $autoload = array();
@@ -989,7 +989,7 @@ EOT
      * @param array<string, string|string[]|null> $json
      * @return array<string, string|string[]|null>
      */
-    private function appendLinks($json, CompletePackageInterface $package)
+    private function appendLinks($json, CompletePackageInterface $package): array
     {
         foreach (Link::$TYPES as $linkType) {
             $json = $this->appendLink($json, $package, $linkType);
@@ -1003,7 +1003,7 @@ EOT
      * @param string $linkType
      * @return array<string, string|string[]|null>
      */
-    private function appendLink($json, CompletePackageInterface $package, $linkType)
+    private function appendLink($json, CompletePackageInterface $package, $linkType): array
     {
         $links = $package->{'get' . ucfirst($linkType)}();
 
@@ -1233,7 +1233,7 @@ EOT
      * @param string $updateStatus
      * @return string
      */
-    private function updateStatusToVersionStyle($updateStatus)
+    private function updateStatusToVersionStyle($updateStatus): string
     {
         // 'up-to-date' is printed green
         // 'semver-safe-update' is printed red
@@ -1244,7 +1244,7 @@ EOT
     /**
      * @return string
      */
-    private function getUpdateStatus(PackageInterface $latestPackage, PackageInterface $package)
+    private function getUpdateStatus(PackageInterface $latestPackage, PackageInterface $package): string
     {
         if ($latestPackage->getFullPrettyVersion() === $package->getFullPrettyVersion()) {
             return 'up-to-date';
@@ -1268,7 +1268,7 @@ EOT
      *
      * @return void
      */
-    private function writeTreeLine($line)
+    private function writeTreeLine($line): void
     {
         $io = $this->getIO();
         if (!$io->isDecorated()) {
@@ -1322,7 +1322,7 @@ EOT
     /**
      * @return RepositorySet
      */
-    private function getRepositorySet(Composer $composer)
+    private function getRepositorySet(Composer $composer): RepositorySet
     {
         if (!$this->repositorySet) {
             $this->repositorySet = new RepositorySet($composer->getPackage()->getMinimumStability(), $composer->getPackage()->getStabilityFlags());
@@ -1338,7 +1338,7 @@ EOT
      * @param  array<PackageInterface> $bucket
      * @return array<PackageInterface>
      */
-    private function filterRequiredPackages(RepositoryInterface $repo, PackageInterface $package, $bucket = array())
+    private function filterRequiredPackages(RepositoryInterface $repo, PackageInterface $package, $bucket = array()): array
     {
         $requires = $package->getRequires();
 

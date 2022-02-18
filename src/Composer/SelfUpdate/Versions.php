@@ -105,7 +105,7 @@ class Versions
     /**
      * @return array<string, array<int, array{path: string, version: string, min-php: int, eol?: true}>>
      */
-    private function getVersionsData()
+    private function getVersionsData(): array
     {
         if (null === $this->versionsData) {
             if ($this->config->get('disable-tls') === true) {

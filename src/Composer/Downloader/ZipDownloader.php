@@ -106,7 +106,7 @@ class ZipDownloader extends ArchiveDownloader
      * @param  string           $path Path where to extract file
      * @return PromiseInterface
      */
-    private function extractWithSystemUnzip(PackageInterface $package, $file, $path)
+    private function extractWithSystemUnzip(PackageInterface $package, $file, $path): PromiseInterface
     {
         static $warned7ZipLinux = false;
 
@@ -183,7 +183,7 @@ class ZipDownloader extends ArchiveDownloader
      * @param  string           $path Path where to extract file
      * @return PromiseInterface
      */
-    private function extractWithZipArchive(PackageInterface $package, $file, $path)
+    private function extractWithZipArchive(PackageInterface $package, $file, $path): PromiseInterface
     {
         $processError = null;
         $zipArchive = $this->zipArchiveObject ?: new ZipArchive();

@@ -1831,7 +1831,7 @@ EOF;
     /**
      * @return array<string, mixed[]>
      */
-    public function platformCheckProvider()
+    public function platformCheckProvider(): array
     {
         $versionParser = new VersionParser();
 
