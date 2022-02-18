@@ -135,7 +135,7 @@ class Config
     /**
      * @return void
      */
-    public function setConfigSource(ConfigSourceInterface $source)
+    public function setConfigSource(ConfigSourceInterface $source): void
     {
         $this->configSource = $source;
     }
@@ -151,7 +151,7 @@ class Config
     /**
      * @return void
      */
-    public function setAuthConfigSource(ConfigSourceInterface $source)
+    public function setAuthConfigSource(ConfigSourceInterface $source): void
     {
         $this->authConfigSource = $source;
     }
@@ -172,7 +172,7 @@ class Config
      *
      * @return void
      */
-    public function merge($config, $source = self::SOURCE_UNKNOWN)
+    public function merge($config, $source = self::SOURCE_UNKNOWN): void
     {
         // override defaults with given config
         if (!empty($config['config']) && is_array($config['config'])) {
@@ -474,7 +474,7 @@ class Config
      *
      * @return void
      */
-    private function setSourceOfConfigValue($configValue, $path, $source)
+    private function setSourceOfConfigValue($configValue, $path, $source): void
     {
         $this->sourceOfConfigValue[$path] = $source;
 
@@ -566,7 +566,7 @@ class Config
      *
      * @return void
      */
-    private function disableRepoByName($name)
+    private function disableRepoByName($name): void
     {
         if (isset($this->repositories[$name])) {
             unset($this->repositories[$name]);
@@ -583,7 +583,7 @@ class Config
      *
      * @return void
      */
-    public function prohibitUrlByConfig($url, IOInterface $io = null)
+    public function prohibitUrlByConfig($url, IOInterface $io = null): void
     {
         // Return right away if the URL is malformed or custom (see issue #5173)
         if (false === filter_var($url, FILTER_VALIDATE_URL)) {
@@ -629,7 +629,7 @@ class Config
      *
      * @return void
      */
-    public static function disableProcessTimeout()
+    public static function disableProcessTimeout(): void
     {
         // Override global timeout set earlier by environment or config
         ProcessExecutor::setTimeout(0);

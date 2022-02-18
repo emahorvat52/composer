@@ -61,7 +61,7 @@ class ZipDownloaderTest extends TestCase
      * @param ?\Composer\Test\Downloader\MockedZipDownloader $obj
      * @return void
      */
-    public function setPrivateProperty($name, $value, $obj = null)
+    public function setPrivateProperty($name, $value, $obj = null): void
     {
         $reflectionClass = new \ReflectionClass('Composer\Downloader\ZipDownloader');
         $reflectedProperty = $reflectionClass->getProperty($name);
@@ -73,7 +73,7 @@ class ZipDownloaderTest extends TestCase
         }
     }
 
-    public function testErrorMessages()
+    public function testErrorMessages(): void
     {
         if (!class_exists('ZipArchive')) {
             $this->markTestSkipped('zip extension missing');
@@ -111,7 +111,7 @@ class ZipDownloaderTest extends TestCase
         }
     }
 
-    public function testZipArchiveOnlyFailed()
+    public function testZipArchiveOnlyFailed(): void
     {
         self::expectException('RuntimeException');
         self::expectExceptionMessage('There was an error extracting the ZIP file');
@@ -134,7 +134,7 @@ class ZipDownloaderTest extends TestCase
         $this->wait($promise);
     }
 
-    public function testZipArchiveExtractOnlyFailed()
+    public function testZipArchiveExtractOnlyFailed(): void
     {
         self::expectException('RuntimeException');
         self::expectExceptionMessage('The archive may contain identical file names with different capitalization (which fails on case insensitive filesystems): Not a directory');
@@ -157,7 +157,7 @@ class ZipDownloaderTest extends TestCase
         $this->wait($promise);
     }
 
-    public function testZipArchiveOnlyGood()
+    public function testZipArchiveOnlyGood(): void
     {
         if (!class_exists('ZipArchive')) {
             $this->markTestSkipped('zip extension missing');
@@ -178,7 +178,7 @@ class ZipDownloaderTest extends TestCase
         $this->wait($promise);
     }
 
-    public function testSystemUnzipOnlyFailed()
+    public function testSystemUnzipOnlyFailed(): void
     {
         self::expectException('Exception');
         self::expectExceptionMessage('Failed to extract : (1) unzip');
@@ -207,7 +207,7 @@ class ZipDownloaderTest extends TestCase
         $this->wait($promise);
     }
 
-    public function testSystemUnzipOnlyGood()
+    public function testSystemUnzipOnlyGood(): void
     {
         $this->setPrivateProperty('isWindows', false);
         $this->setPrivateProperty('hasZipArchive', false);
@@ -234,7 +234,7 @@ class ZipDownloaderTest extends TestCase
         $this->wait($promise);
     }
 
-    public function testNonWindowsFallbackGood()
+    public function testNonWindowsFallbackGood(): void
     {
         if (!class_exists('ZipArchive')) {
             $this->markTestSkipped('zip extension missing');
@@ -273,7 +273,7 @@ class ZipDownloaderTest extends TestCase
         $this->wait($promise);
     }
 
-    public function testNonWindowsFallbackFailed()
+    public function testNonWindowsFallbackFailed(): void
     {
         self::expectException('Exception');
         self::expectExceptionMessage('There was an error extracting the ZIP file');
@@ -318,16 +318,16 @@ class ZipDownloaderTest extends TestCase
      * @param ?\React\Promise\PromiseInterface $promise
      * @return void
      */
-    private function wait($promise)
+    private function wait($promise): void
     {
         if (null === $promise) {
             return;
         }
 
         $e = null;
-        $promise->then(function () {
+        $promise->then(function (): void {
             // noop
-        }, function ($ex) use (&$e) {
+        }, function ($ex) use (&$e): void {
             $e = $ex;
         });
 

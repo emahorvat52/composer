@@ -92,7 +92,7 @@ class PluginManager
      *
      * @return void
      */
-    public function loadInstalledPlugins()
+    public function loadInstalledPlugins(): void
     {
         if (!$this->arePluginsDisabled('local')) {
             $repo = $this->composer->getRepositoryManager()->getLocalRepository();
@@ -112,7 +112,7 @@ class PluginManager
      *
      * @return void
      */
-    public function deactivateInstalledPlugins()
+    public function deactivateInstalledPlugins(): void
     {
         if (!$this->arePluginsDisabled('local')) {
             $repo = $this->composer->getRepositoryManager()->getLocalRepository();
@@ -161,7 +161,7 @@ class PluginManager
      *
      * @throws \UnexpectedValueException
      */
-    public function registerPackage(PackageInterface $package, $failOnMissingClasses = false, $isGlobalPlugin = false)
+    public function registerPackage(PackageInterface $package, $failOnMissingClasses = false, $isGlobalPlugin = false): void
     {
         if ($this->arePluginsDisabled($isGlobalPlugin ? 'global' : 'local')) {
             return;
@@ -320,7 +320,7 @@ class PluginManager
      *
      * @throws \UnexpectedValueException
      */
-    public function deactivatePackage(PackageInterface $package)
+    public function deactivatePackage(PackageInterface $package): void
     {
         if (!isset($this->registeredPlugins[$package->getName()])) {
             return;
@@ -347,7 +347,7 @@ class PluginManager
      *
      * @throws \UnexpectedValueException
      */
-    public function uninstallPackage(PackageInterface $package)
+    public function uninstallPackage(PackageInterface $package): void
     {
         if (!isset($this->registeredPlugins[$package->getName()])) {
             return;
@@ -386,7 +386,7 @@ class PluginManager
      *
      * @return void
      */
-    public function addPlugin(PluginInterface $plugin, $isGlobalPlugin = false, PackageInterface $sourcePackage = null)
+    public function addPlugin(PluginInterface $plugin, $isGlobalPlugin = false, PackageInterface $sourcePackage = null): void
     {
         if ($this->arePluginsDisabled($isGlobalPlugin ? 'global' : 'local')) {
             return;
@@ -426,7 +426,7 @@ class PluginManager
      *
      * @return void
      */
-    public function removePlugin(PluginInterface $plugin)
+    public function removePlugin(PluginInterface $plugin): void
     {
         $index = array_search($plugin, $this->plugins, true);
         if ($index === false) {
@@ -451,7 +451,7 @@ class PluginManager
      *
      * @return void
      */
-    public function uninstallPlugin(PluginInterface $plugin)
+    public function uninstallPlugin(PluginInterface $plugin): void
     {
         $this->io->writeError('Uninstalling plugin '.get_class($plugin), true, IOInterface::DEBUG);
         $plugin->uninstall($this->composer, $this->io);
@@ -473,7 +473,7 @@ class PluginManager
      *
      * @throws \RuntimeException
      */
-    private function loadRepository(RepositoryInterface $repo, $isGlobalRepo)
+    private function loadRepository(RepositoryInterface $repo, $isGlobalRepo): void
     {
         $packages = $repo->getPackages();
 
@@ -511,7 +511,7 @@ class PluginManager
      *
      * @return void
      */
-    private function deactivateRepository(RepositoryInterface $repo, $isGlobalRepo)
+    private function deactivateRepository(RepositoryInterface $repo, $isGlobalRepo): void
     {
         $packages = $repo->getPackages();
         $sortedPackages = array_reverse(PackageSorter::sortPackages($packages));
