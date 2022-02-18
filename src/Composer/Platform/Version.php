@@ -24,7 +24,7 @@ class Version
      * @param  bool        $isFips
      * @return string|null
      */
-    public static function parseOpenssl($opensslVersion, &$isFips)
+    public static function parseOpenssl($opensslVersion, &$isFips): ?string
     {
         $isFips = false;
 
@@ -48,7 +48,7 @@ class Version
      * @param  string      $libjpegVersion
      * @return string|null
      */
-    public static function parseLibjpeg($libjpegVersion)
+    public static function parseLibjpeg($libjpegVersion): ?string
     {
         if (!Preg::isMatch('/^(?<major>\d+)(?<minor>[a-z]*)$/', $libjpegVersion, $matches)) {
             return null;
@@ -61,7 +61,7 @@ class Version
      * @param  string      $zoneinfoVersion
      * @return string|null
      */
-    public static function parseZoneinfoVersion($zoneinfoVersion)
+    public static function parseZoneinfoVersion($zoneinfoVersion): ?string
     {
         if (!Preg::isMatch('/^(?<year>\d{4})(?<revision>[a-z]*)$/', $zoneinfoVersion, $matches)) {
             return null;
@@ -85,7 +85,7 @@ class Version
      * @param  int    $versionId
      * @return string
      */
-    public static function convertLibxpmVersionId($versionId)
+    public static function convertLibxpmVersionId($versionId): string
     {
         return self::convertVersionId($versionId, 100);
     }
@@ -94,7 +94,7 @@ class Version
      * @param  int    $versionId
      * @return string
      */
-    public static function convertOpenldapVersionId($versionId)
+    public static function convertOpenldapVersionId($versionId): string
     {
         return self::convertVersionId($versionId, 100);
     }
