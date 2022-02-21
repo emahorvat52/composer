@@ -101,10 +101,10 @@ class AutoloadGeneratorTest extends TestCase
         $this->config = $this->getMockBuilder('Composer\Config')->getMock();
 
         $this->configValueMap = array(
-            'vendor-dir' => function () {
+            'vendor-dir' => function (): string {
                 return $this->vendorDir;
             },
-            'platform-check' => function () {
+            'platform-check' => function (): bool {
                 return true;
             },
         );
@@ -131,7 +131,7 @@ class AutoloadGeneratorTest extends TestCase
             ->getMock();
         $this->im->expects($this->any())
             ->method('getInstallPath')
-            ->will($this->returnCallback(function ($package) {
+            ->will($this->returnCallback(function ($package): string {
                 $targetDir = $package->getTargetDir();
 
                 return $this->vendorDir.'/'.$package->getName() . ($targetDir ? '/'.$targetDir : '');
@@ -1363,7 +1363,7 @@ EOF;
             ->getMock();
         $im->expects($this->any())
             ->method('getInstallPath')
-            ->will($this->returnCallback(function ($package) use ($vendorDir) {
+            ->will($this->returnCallback(function ($package) use ($vendorDir): string {
                 $targetDir = $package->getTargetDir();
 
                 return $vendorDir.'/'.$package->getName() . ($targetDir ? '/'.$targetDir : '');
