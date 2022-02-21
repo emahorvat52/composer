@@ -79,7 +79,7 @@ class PluginInstaller extends LibraryInstaller
             $promise = \React\Promise\resolve();
         }
 
-        return $promise->then(function () use ($package, $repo) {
+        return $promise->then(function () use ($package, $repo): void {
             try {
                 Platform::workaroundFilesystemIssues();
                 $this->getPluginManager()->registerPackage($package, true);
@@ -99,7 +99,7 @@ class PluginInstaller extends LibraryInstaller
             $promise = \React\Promise\resolve();
         }
 
-        return $promise->then(function () use ($initial, $target, $repo) {
+        return $promise->then(function () use ($initial, $target, $repo): void {
             try {
                 Platform::workaroundFilesystemIssues();
                 $this->getPluginManager()->deactivatePackage($initial);

@@ -716,7 +716,7 @@ EOT
         }
 
         $namespace = array_map(
-            function ($part) {
+            function ($part): string {
                 $part = Preg::replace('/[^a-z0-9]/i', ' ', $part);
                 $part = ucwords($part);
 

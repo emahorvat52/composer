@@ -138,7 +138,7 @@ class ZipDownloader extends ArchiveDownloader
         }
 
         $io = $this->io;
-        $tryFallback = function ($processError) use ($isLastChance, $io, $file, $path, $package, $executable) {
+        $tryFallback = function ($processError) use ($isLastChance, $io, $file, $path, $package, $executable): \React\Promise\PromiseInterface {
             if ($isLastChance) {
                 throw $processError;
             }
