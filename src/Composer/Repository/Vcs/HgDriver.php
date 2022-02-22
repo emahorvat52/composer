@@ -37,7 +37,7 @@ class HgDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function initialize()
+    public function initialize(): void
     {
         if (Filesystem::isLocalPath($this->url)) {
             $this->repoDir = $this->url;
@@ -86,7 +86,7 @@ class HgDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getRootIdentifier()
+    public function getRootIdentifier(): string
     {
         if (null === $this->rootIdentifier) {
             $this->process->execute(sprintf('hg tip --template "{node}"'), $output, $this->repoDir);
@@ -100,7 +100,7 @@ class HgDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }
@@ -108,7 +108,7 @@ class HgDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getSource(string $identifier)
+    public function getSource(string $identifier): array
     {
         return array('type' => 'hg', 'url' => $this->getUrl(), 'reference' => $identifier);
     }
@@ -116,7 +116,7 @@ class HgDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getDist(string $identifier)
+    public function getDist(string $identifier): ?array
     {
         return null;
     }
@@ -124,7 +124,7 @@ class HgDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getFileContent(string $file, string $identifier)
+    public function getFileContent(string $file, string $identifier): ?string
     {
         if (isset($identifier[0]) && $identifier[0] === '-') {
             throw new \RuntimeException('Invalid hg identifier detected. Identifier must not start with a -, given: ' . $identifier);
@@ -143,7 +143,7 @@ class HgDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getChangeDate(string $identifier)
+    public function getChangeDate(string $identifier): ?\DateTimeImmutable
     {
         $this->process->execute(
             sprintf(
@@ -154,13 +154,13 @@ class HgDriver extends VcsDriver
             $this->repoDir
         );
 
-        return new \DateTime(trim($output), new \DateTimeZone('UTC'));
+        return new \DateTimeImmutable(trim($output), new \DateTimeZone('UTC'));
     }
 
     /**
      * @inheritDoc
      */
-    public function getTags()
+    public function getTags(): array
     {
         if (null === $this->tags) {
             $tags = array();
@@ -182,7 +182,7 @@ class HgDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getBranches()
+    public function getBranches(): array
     {
         if (null === $this->branches) {
             $branches = array();
@@ -212,7 +212,7 @@ class HgDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public static function supports(IOInterface $io, Config $config, string $url, bool $deep = false)
+    public static function supports(IOInterface $io, Config $config, string $url, bool $deep = false): bool
     {
         if (Preg::isMatch('#(^(?:https?|ssh)://(?:[^@]+@)?bitbucket.org|https://(?:.*?)\.kilnhg.com)#i', $url)) {
             return true;
