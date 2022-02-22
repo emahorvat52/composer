@@ -386,7 +386,7 @@ class Installer
      * @return int
      * @phpstan-return self::ERROR_*
      */
-    protected function doUpdate(InstalledRepositoryInterface $localRepo, $doInstall): int
+    protected function doUpdate(InstalledRepositoryInterface $localRepo, bool $doInstall): int
     {
         $platformRepo = $this->createPlatformRepo(true);
         $aliases = $this->getRootAliases(true);
@@ -655,7 +655,7 @@ class Installer
      * @return int                          exit code
      * @phpstan-return self::ERROR_*
      */
-    protected function doInstall(InstalledRepositoryInterface $localRepo, $alreadySolved = false): int
+    protected function doInstall(InstalledRepositoryInterface $localRepo, bool $alreadySolved = false): int
     {
         if ($this->config->get('lock')) {
             $this->io->writeError('<info>Installing dependencies from lock file'.($this->devMode ? ' (including require-dev)' : '').'</info>');
@@ -778,7 +778,7 @@ class Installer
      *
      * @return PlatformRepository
      */
-    protected function createPlatformRepo($forUpdate): PlatformRepository
+    protected function createPlatformRepo(bool $forUpdate): PlatformRepository
     {
         if ($forUpdate) {
             $platformOverrides = $this->config->get('platform') ?: array();
@@ -798,7 +798,7 @@ class Installer
      *
      * @phpstan-param list<array{package: string, version: string, alias: string, alias_normalized: string}> $rootAliases
      */
-    private function createRepositorySet($forUpdate, PlatformRepository $platformRepo, array $rootAliases = array(), $lockedRepository = null): RepositorySet
+    private function createRepositorySet(bool $forUpdate, PlatformRepository $platformRepo, array $rootAliases = array(), ?RepositoryInterface $lockedRepository = null): RepositorySet
     {
         if ($forUpdate) {
             $minimumStability = $this->package->getMinimumStability();
@@ -867,7 +867,7 @@ class Installer
      *
      * @return DefaultPolicy
      */
-    private function createPolicy($forUpdate): DefaultPolicy
+    private function createPolicy(bool $forUpdate): DefaultPolicy
     {
         $preferStable = null;
         $preferLowest = null;
@@ -928,7 +928,7 @@ class Installer
      *
      * @return void
      */
-    private function requirePackagesForUpdate(Request $request, LockArrayRepository $lockedRepository = null, $includeDevRequires = true): void
+    private function requirePackagesForUpdate(Request $request, LockArrayRepository $lockedRepository = null, bool $includeDevRequires = true): void
     {
         // if we're updating mirrors we want to keep exactly the same versions installed which are in the lock file, but we want current remote metadata
         if ($this->updateMirrors) {
@@ -962,7 +962,7 @@ class Installer
      *
      * @phpstan-return list<array{package: string, version: string, alias: string, alias_normalized: string}>
      */
-    private function getRootAliases($forUpdate): array
+    private function getRootAliases(bool $forUpdate): array
     {
         if ($forUpdate) {
             $aliases = $this->package->getAliases();
@@ -1071,7 +1071,7 @@ class Installer
      * @param  bool      $dryRun
      * @return Installer
      */
-    public function setDryRun($dryRun = true): Installer
+    public function setDryRun(bool $dryRun = true): Installer
     {
         $this->dryRun = (bool) $dryRun;
 
@@ -1094,7 +1094,7 @@ class Installer
      * @param  bool      $preferSource
      * @return Installer
      */
-    public function setPreferSource($preferSource = true): Installer
+    public function setPreferSource(bool $preferSource = true): Installer
     {
         $this->preferSource = (bool) $preferSource;
 
@@ -1107,7 +1107,7 @@ class Installer
      * @param  bool      $preferDist
      * @return Installer
      */
-    public function setPreferDist($preferDist = true): Installer
+    public function setPreferDist(bool $preferDist = true): Installer
     {
         $this->preferDist = (bool) $preferDist;
 
@@ -1120,7 +1120,7 @@ class Installer
      * @param  bool      $optimizeAutoloader
      * @return Installer
      */
-    public function setOptimizeAutoloader($optimizeAutoloader): Installer
+    public function setOptimizeAutoloader(bool $optimizeAutoloader): Installer
     {
         $this->optimizeAutoloader = (bool) $optimizeAutoloader;
         if (!$this->optimizeAutoloader) {
@@ -1139,7 +1139,7 @@ class Installer
      * @param  bool      $classMapAuthoritative
      * @return Installer
      */
-    public function setClassMapAuthoritative($classMapAuthoritative): Installer
+    public function setClassMapAuthoritative(bool $classMapAuthoritative): Installer
     {
         $this->classMapAuthoritative = (bool) $classMapAuthoritative;
         if ($this->classMapAuthoritative) {
@@ -1157,7 +1157,7 @@ class Installer
      * @param  string|null $apcuAutoloaderPrefix
      * @return Installer
      */
-    public function setApcuAutoloader($apcuAutoloader, $apcuAutoloaderPrefix = null): Installer
+    public function setApcuAutoloader(bool $apcuAutoloader, ?string $apcuAutoloaderPrefix = null): Installer
     {
         $this->apcuAutoloader = $apcuAutoloader;
         $this->apcuAutoloaderPrefix = $apcuAutoloaderPrefix;
@@ -1171,7 +1171,7 @@ class Installer
      * @param  bool      $update
      * @return Installer
      */
-    public function setUpdate($update): Installer
+    public function setUpdate(bool $update): Installer
     {
         $this->update = (bool) $update;
 
@@ -1184,7 +1184,7 @@ class Installer
      * @param  bool      $install
      * @return Installer
      */
-    public function setInstall($install): Installer
+    public function setInstall(bool $install): Installer
     {
         $this->install = (bool) $install;
 
@@ -1197,7 +1197,7 @@ class Installer
      * @param  bool      $devMode
      * @return Installer
      */
-    public function setDevMode($devMode = true): Installer
+    public function setDevMode(bool $devMode = true): Installer
     {
         $this->devMode = (bool) $devMode;
 
@@ -1212,7 +1212,7 @@ class Installer
      * @param  bool      $dumpAutoloader
      * @return Installer
      */
-    public function setDumpAutoloader($dumpAutoloader = true): Installer
+    public function setDumpAutoloader(bool $dumpAutoloader = true): Installer
     {
         $this->dumpAutoloader = (bool) $dumpAutoloader;
 
@@ -1228,7 +1228,7 @@ class Installer
      * @return Installer
      * @deprecated Use setRunScripts(false) on the EventDispatcher instance being injected instead
      */
-    public function setRunScripts($runScripts = true): Installer
+    public function setRunScripts(bool $runScripts = true): Installer
     {
         $this->runScripts = (bool) $runScripts;
 
@@ -1254,7 +1254,7 @@ class Installer
      * @param  bool      $verbose
      * @return Installer
      */
-    public function setVerbose($verbose = true): Installer
+    public function setVerbose(bool $verbose = true): Installer
     {
         $this->verbose = (bool) $verbose;
 
@@ -1308,7 +1308,7 @@ class Installer
      * @param  bool      $updateMirrors
      * @return Installer
      */
-    public function setUpdateMirrors($updateMirrors): Installer
+    public function setUpdateMirrors(bool $updateMirrors): Installer
     {
         $this->updateMirrors = $updateMirrors;
 
@@ -1339,7 +1339,7 @@ class Installer
      * @param  int       $updateAllowTransitiveDependencies One of the UPDATE_ constants on the Request class
      * @return Installer
      */
-    public function setUpdateAllowTransitiveDependencies($updateAllowTransitiveDependencies): Installer
+    public function setUpdateAllowTransitiveDependencies(int $updateAllowTransitiveDependencies): Installer
     {
         if (!in_array($updateAllowTransitiveDependencies, array(Request::UPDATE_ONLY_LISTED, Request::UPDATE_LISTED_WITH_TRANSITIVE_DEPS_NO_ROOT_REQUIRE, Request::UPDATE_LISTED_WITH_TRANSITIVE_DEPS), true)) {
             throw new \RuntimeException("Invalid value for updateAllowTransitiveDependencies supplied");
@@ -1356,7 +1356,7 @@ class Installer
      * @param  bool      $preferStable
      * @return Installer
      */
-    public function setPreferStable($preferStable = true): Installer
+    public function setPreferStable(bool $preferStable = true): Installer
     {
         $this->preferStable = (bool) $preferStable;
 
@@ -1369,7 +1369,7 @@ class Installer
      * @param  bool      $preferLowest
      * @return Installer
      */
-    public function setPreferLowest($preferLowest = true): Installer
+    public function setPreferLowest(bool $preferLowest = true): Installer
     {
         $this->preferLowest = (bool) $preferLowest;
 
@@ -1384,7 +1384,7 @@ class Installer
      * @param  bool      $writeLock
      * @return Installer
      */
-    public function setWriteLock($writeLock = true): Installer
+    public function setWriteLock(bool $writeLock = true): Installer
     {
         $this->writeLock = (bool) $writeLock;
 
@@ -1399,7 +1399,7 @@ class Installer
      * @param  bool      $executeOperations
      * @return Installer
      */
-    public function setExecuteOperations($executeOperations = true): Installer
+    public function setExecuteOperations(bool $executeOperations = true): Installer
     {
         $this->executeOperations = (bool) $executeOperations;
 

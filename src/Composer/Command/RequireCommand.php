@@ -299,7 +299,7 @@ EOT
      * @param string $requireKey
      * @return string[]
      */
-    private function getInconsistentRequireKeys(array $newRequirements, $requireKey): array
+    private function getInconsistentRequireKeys(array $newRequirements, string $requireKey): array
     {
         $requireKeys = $this->getPackagesByRequireKey();
         $inconsistentRequirements = array();
@@ -354,7 +354,7 @@ EOT
      * @return int
      * @throws \Exception
      */
-    private function doUpdate(InputInterface $input, OutputInterface $output, IOInterface $io, array $requirements, $requireKey, $removeKey): int
+    private function doUpdate(InputInterface $input, OutputInterface $output, IOInterface $io, array $requirements, string $requireKey, string $removeKey): int
     {
         // Update packages
         $this->resetComposer();
@@ -452,7 +452,7 @@ EOT
      * @param bool $sortPackages
      * @return bool
      */
-    private function updateFileCleanly(JsonFile $json, array $new, $requireKey, $removeKey, $sortPackages): bool
+    private function updateFileCleanly(JsonFile $json, array $new, string $requireKey, string $removeKey, bool $sortPackages): bool
     {
         $contents = file_get_contents($json->getPath());
 
@@ -483,7 +483,7 @@ EOT
      * @param bool $hardExit
      * @return void
      */
-    public function revertComposerFile($hardExit = true)
+    public function revertComposerFile(bool $hardExit = true)
     {
         $io = $this->getIO();
 

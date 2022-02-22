@@ -282,7 +282,7 @@ class ArchivableFilesFinderTest extends TestCase
      *
      * @return string[]
      */
-    protected function getArchivedFiles($command): array
+    protected function getArchivedFiles(string $command): array
     {
         $process = Process::fromShellCommandline($command, $this->sources);
         $process->run();
@@ -306,7 +306,7 @@ class ArchivableFilesFinderTest extends TestCase
      *
      * @return void
      */
-    protected function assertArchivableFiles($expectedFiles): void
+    protected function assertArchivableFiles(array $expectedFiles): void
     {
         $actualFiles = $this->getArchivableFiles();
 

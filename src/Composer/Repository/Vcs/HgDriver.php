@@ -108,7 +108,7 @@ class HgDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getSource($identifier)
+    public function getSource(string $identifier)
     {
         return array('type' => 'hg', 'url' => $this->getUrl(), 'reference' => $identifier);
     }
@@ -116,7 +116,7 @@ class HgDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getDist($identifier)
+    public function getDist(string $identifier)
     {
         return null;
     }
@@ -124,7 +124,7 @@ class HgDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getFileContent($file, $identifier)
+    public function getFileContent(string $file, string $identifier)
     {
         if (isset($identifier[0]) && $identifier[0] === '-') {
             throw new \RuntimeException('Invalid hg identifier detected. Identifier must not start with a -, given: ' . $identifier);
@@ -143,7 +143,7 @@ class HgDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getChangeDate($identifier)
+    public function getChangeDate(string $identifier)
     {
         $this->process->execute(
             sprintf(
@@ -212,7 +212,7 @@ class HgDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public static function supports(IOInterface $io, Config $config, $url, $deep = false)
+    public static function supports(IOInterface $io, Config $config, string $url, bool $deep = false)
     {
         if (Preg::isMatch('#(^(?:https?|ssh)://(?:[^@]+@)?bitbucket.org|https://(?:.*?)\.kilnhg.com)#i', $url)) {
             return true;

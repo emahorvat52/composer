@@ -120,7 +120,7 @@ class GitDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getSource($identifier)
+    public function getSource(string $identifier)
     {
         return array('type' => 'git', 'url' => $this->getUrl(), 'reference' => $identifier);
     }
@@ -128,7 +128,7 @@ class GitDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getDist($identifier)
+    public function getDist(string $identifier)
     {
         return null;
     }
@@ -136,7 +136,7 @@ class GitDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getFileContent($file, $identifier)
+    public function getFileContent(string $file, string $identifier)
     {
         if (isset($identifier[0]) && $identifier[0] === '-') {
             throw new \RuntimeException('Invalid git identifier detected. Identifier must not start with a -, given: ' . $identifier);
@@ -155,7 +155,7 @@ class GitDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getChangeDate($identifier)
+    public function getChangeDate(string $identifier)
     {
         $this->process->execute(sprintf(
             'git -c log.showSignature=false log -1 --format=%%at %s',
@@ -210,7 +210,7 @@ class GitDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public static function supports(IOInterface $io, Config $config, $url, $deep = false)
+    public static function supports(IOInterface $io, Config $config, string $url, bool $deep = false)
     {
         if (Preg::isMatch('#(^git://|\.git/?$|git(?:olite)?@|//git\.|//github.com/)#i', $url)) {
             return true;

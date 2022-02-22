@@ -130,7 +130,7 @@ class GitHubDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getSource($identifier)
+    public function getSource(string $identifier)
     {
         if ($this->gitDriver) {
             return $this->gitDriver->getSource($identifier);
@@ -149,7 +149,7 @@ class GitHubDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getDist($identifier)
+    public function getDist(string $identifier)
     {
         $url = $this->getApiUrl() . '/repos/'.$this->owner.'/'.$this->repository.'/zipball/'.$identifier;
 
@@ -159,7 +159,7 @@ class GitHubDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getComposerInformation($identifier)
+    public function getComposerInformation(string $identifier)
     {
         if ($this->gitDriver) {
             return $this->gitDriver->getComposerInformation($identifier);
@@ -296,7 +296,7 @@ class GitHubDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getFileContent($file, $identifier)
+    public function getFileContent(string $file, string $identifier)
     {
         if ($this->gitDriver) {
             return $this->gitDriver->getFileContent($file, $identifier);
@@ -314,7 +314,7 @@ class GitHubDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public function getChangeDate($identifier)
+    public function getChangeDate(string $identifier)
     {
         if ($this->gitDriver) {
             return $this->gitDriver->getChangeDate($identifier);
@@ -388,7 +388,7 @@ class GitHubDriver extends VcsDriver
     /**
      * @inheritDoc
      */
-    public static function supports(IOInterface $io, Config $config, $url, $deep = false)
+    public static function supports(IOInterface $io, Config $config, string $url, bool $deep = false)
     {
         if (!Preg::isMatch('#^((?:https?|git)://([^/]+)/|git@([^:]+):/?)([^/]+)/([^/]+?)(?:\.git|/)?$#', $url, $matches)) {
             return false;
@@ -439,7 +439,7 @@ class GitHubDriver extends VcsDriver
      *
      * @param bool $fetchingRepoData
      */
-    protected function getContents($url, $fetchingRepoData = false)
+    protected function getContents(string $url, bool $fetchingRepoData = false)
     {
         try {
             return parent::getContents($url);
@@ -597,7 +597,7 @@ class GitHubDriver extends VcsDriver
      *
      * @return void
      */
-    protected function setupGitDriver($url)
+    protected function setupGitDriver(string $url)
     {
         $this->gitDriver = new GitDriver(
             array('url' => $url),

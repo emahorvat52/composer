@@ -68,7 +68,7 @@ abstract class BasePackage implements PackageInterface
      *
      * @param string $name The package's name
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->prettyName = $name;
         $this->name = strtolower($name);
@@ -262,7 +262,7 @@ abstract class BasePackage implements PackageInterface
      * @param  non-empty-string $wrap         Wrap the cleaned string by the given string
      * @return non-empty-string
      */
-    public static function packageNameToRegexp($allowPattern, $wrap = '{^%s$}i')
+    public static function packageNameToRegexp(string $allowPattern, string $wrap = '{^%s$}i')
     {
         $cleanedAllowPattern = str_replace('\\*', '.*', preg_quote($allowPattern));
 
@@ -276,7 +276,7 @@ abstract class BasePackage implements PackageInterface
      * @param non-empty-string $wrap
      * @return non-empty-string
      */
-    public static function packageNamesToRegexp(array $packageNames, $wrap = '{^(?:%s)$}iD')
+    public static function packageNamesToRegexp(array $packageNames, string $wrap = '{^(?:%s)$}iD')
     {
         $packageNames = array_map(
             function ($packageName): string {
