@@ -445,7 +445,7 @@ class Git
     /**
      * @return non-empty-string
      */
-    public static function getGitHubDomainsRegex(Config $config)
+    public static function getGitHubDomainsRegex(Config $config): string
     {
         return '(' . implode('|', array_map('preg_quote', $config->get('github-domains'))) . ')';
     }
@@ -453,7 +453,7 @@ class Git
     /**
      * @return non-empty-string
      */
-    public static function getGitLabDomainsRegex(Config $config)
+    public static function getGitLabDomainsRegex(Config $config): string
     {
         return '(' . implode('|', array_map('preg_quote', $config->get('gitlab-domains'))) . ')';
     }

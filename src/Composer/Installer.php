@@ -1039,7 +1039,7 @@ class Installer
      * @param  Composer    $composer
      * @return Installer
      */
-    public static function create(IOInterface $io, Composer $composer): Installer
+    public static function create(IOInterface $io, Composer $composer): self
     {
         return new static(
             $io,
@@ -1058,7 +1058,7 @@ class Installer
      * @param  RepositoryInterface $additionalFixedRepository
      * @return $this
      */
-    public function setAdditionalFixedRepository(RepositoryInterface $additionalFixedRepository)
+    public function setAdditionalFixedRepository(RepositoryInterface $additionalFixedRepository): self
     {
         $this->additionalFixedRepository = $additionalFixedRepository;
 
@@ -1071,7 +1071,7 @@ class Installer
      * @param  bool      $dryRun
      * @return Installer
      */
-    public function setDryRun(bool $dryRun = true): Installer
+    public function setDryRun(bool $dryRun = true): self
     {
         $this->dryRun = (bool) $dryRun;
 
@@ -1094,7 +1094,7 @@ class Installer
      * @param  bool      $preferSource
      * @return Installer
      */
-    public function setPreferSource(bool $preferSource = true): Installer
+    public function setPreferSource(bool $preferSource = true): self
     {
         $this->preferSource = (bool) $preferSource;
 
@@ -1107,7 +1107,7 @@ class Installer
      * @param  bool      $preferDist
      * @return Installer
      */
-    public function setPreferDist(bool $preferDist = true): Installer
+    public function setPreferDist(bool $preferDist = true): self
     {
         $this->preferDist = (bool) $preferDist;
 
@@ -1120,7 +1120,7 @@ class Installer
      * @param  bool      $optimizeAutoloader
      * @return Installer
      */
-    public function setOptimizeAutoloader(bool $optimizeAutoloader): Installer
+    public function setOptimizeAutoloader(bool $optimizeAutoloader): self
     {
         $this->optimizeAutoloader = (bool) $optimizeAutoloader;
         if (!$this->optimizeAutoloader) {
@@ -1139,7 +1139,7 @@ class Installer
      * @param  bool      $classMapAuthoritative
      * @return Installer
      */
-    public function setClassMapAuthoritative(bool $classMapAuthoritative): Installer
+    public function setClassMapAuthoritative(bool $classMapAuthoritative): self
     {
         $this->classMapAuthoritative = (bool) $classMapAuthoritative;
         if ($this->classMapAuthoritative) {
@@ -1157,7 +1157,7 @@ class Installer
      * @param  string|null $apcuAutoloaderPrefix
      * @return Installer
      */
-    public function setApcuAutoloader(bool $apcuAutoloader, ?string $apcuAutoloaderPrefix = null): Installer
+    public function setApcuAutoloader(bool $apcuAutoloader, ?string $apcuAutoloaderPrefix = null): self
     {
         $this->apcuAutoloader = $apcuAutoloader;
         $this->apcuAutoloaderPrefix = $apcuAutoloaderPrefix;
@@ -1171,7 +1171,7 @@ class Installer
      * @param  bool      $update
      * @return Installer
      */
-    public function setUpdate(bool $update): Installer
+    public function setUpdate(bool $update): self
     {
         $this->update = (bool) $update;
 
@@ -1184,7 +1184,7 @@ class Installer
      * @param  bool      $install
      * @return Installer
      */
-    public function setInstall(bool $install): Installer
+    public function setInstall(bool $install): self
     {
         $this->install = (bool) $install;
 
@@ -1197,7 +1197,7 @@ class Installer
      * @param  bool      $devMode
      * @return Installer
      */
-    public function setDevMode(bool $devMode = true): Installer
+    public function setDevMode(bool $devMode = true): self
     {
         $this->devMode = (bool) $devMode;
 
@@ -1212,7 +1212,7 @@ class Installer
      * @param  bool      $dumpAutoloader
      * @return Installer
      */
-    public function setDumpAutoloader(bool $dumpAutoloader = true): Installer
+    public function setDumpAutoloader(bool $dumpAutoloader = true): self
     {
         $this->dumpAutoloader = (bool) $dumpAutoloader;
 
@@ -1228,7 +1228,7 @@ class Installer
      * @return Installer
      * @deprecated Use setRunScripts(false) on the EventDispatcher instance being injected instead
      */
-    public function setRunScripts(bool $runScripts = true): Installer
+    public function setRunScripts(bool $runScripts = true): self
     {
         $this->runScripts = (bool) $runScripts;
 
@@ -1241,7 +1241,7 @@ class Installer
      * @param  Config    $config
      * @return Installer
      */
-    public function setConfig(Config $config): Installer
+    public function setConfig(Config $config): self
     {
         $this->config = $config;
 
@@ -1254,7 +1254,7 @@ class Installer
      * @param  bool      $verbose
      * @return Installer
      */
-    public function setVerbose(bool $verbose = true): Installer
+    public function setVerbose(bool $verbose = true): self
     {
         $this->verbose = (bool) $verbose;
 
@@ -1284,7 +1284,7 @@ class Installer
      *
      * @deprecated use setPlatformRequirementFilter instead
      */
-    public function setIgnorePlatformRequirements($ignorePlatformReqs): Installer
+    public function setIgnorePlatformRequirements($ignorePlatformReqs): self
     {
         trigger_error('Installer::setIgnorePlatformRequirements is deprecated since Composer 2.2, use setPlatformRequirementFilter instead.', E_USER_DEPRECATED);
 
@@ -1295,7 +1295,7 @@ class Installer
      * @param PlatformRequirementFilterInterface $platformRequirementFilter
      * @return Installer
      */
-    public function setPlatformRequirementFilter(PlatformRequirementFilterInterface $platformRequirementFilter): Installer
+    public function setPlatformRequirementFilter(PlatformRequirementFilterInterface $platformRequirementFilter): self
     {
         $this->platformRequirementFilter = $platformRequirementFilter;
 
@@ -1308,7 +1308,7 @@ class Installer
      * @param  bool      $updateMirrors
      * @return Installer
      */
-    public function setUpdateMirrors(bool $updateMirrors): Installer
+    public function setUpdateMirrors(bool $updateMirrors): self
     {
         $this->updateMirrors = $updateMirrors;
 
@@ -1323,7 +1323,7 @@ class Installer
      *
      * @return Installer
      */
-    public function setUpdateAllowList(array $packages): Installer
+    public function setUpdateAllowList(array $packages): self
     {
         $this->updateAllowList = array_flip(array_map('strtolower', $packages));
 
@@ -1339,7 +1339,7 @@ class Installer
      * @param  int       $updateAllowTransitiveDependencies One of the UPDATE_ constants on the Request class
      * @return Installer
      */
-    public function setUpdateAllowTransitiveDependencies(int $updateAllowTransitiveDependencies): Installer
+    public function setUpdateAllowTransitiveDependencies(int $updateAllowTransitiveDependencies): self
     {
         if (!in_array($updateAllowTransitiveDependencies, array(Request::UPDATE_ONLY_LISTED, Request::UPDATE_LISTED_WITH_TRANSITIVE_DEPS_NO_ROOT_REQUIRE, Request::UPDATE_LISTED_WITH_TRANSITIVE_DEPS), true)) {
             throw new \RuntimeException("Invalid value for updateAllowTransitiveDependencies supplied");
@@ -1356,7 +1356,7 @@ class Installer
      * @param  bool      $preferStable
      * @return Installer
      */
-    public function setPreferStable(bool $preferStable = true): Installer
+    public function setPreferStable(bool $preferStable = true): self
     {
         $this->preferStable = (bool) $preferStable;
 
@@ -1369,7 +1369,7 @@ class Installer
      * @param  bool      $preferLowest
      * @return Installer
      */
-    public function setPreferLowest(bool $preferLowest = true): Installer
+    public function setPreferLowest(bool $preferLowest = true): self
     {
         $this->preferLowest = (bool) $preferLowest;
 
@@ -1384,7 +1384,7 @@ class Installer
      * @param  bool      $writeLock
      * @return Installer
      */
-    public function setWriteLock(bool $writeLock = true): Installer
+    public function setWriteLock(bool $writeLock = true): self
     {
         $this->writeLock = (bool) $writeLock;
 
@@ -1399,7 +1399,7 @@ class Installer
      * @param  bool      $executeOperations
      * @return Installer
      */
-    public function setExecuteOperations(bool $executeOperations = true): Installer
+    public function setExecuteOperations(bool $executeOperations = true): self
     {
         $this->executeOperations = (bool) $executeOperations;
 
@@ -1415,7 +1415,7 @@ class Installer
      *
      * @return Installer
      */
-    public function disablePlugins(): Installer
+    public function disablePlugins(): self
     {
         $this->installationManager->disablePlugins();
 
@@ -1426,7 +1426,7 @@ class Installer
      * @param  SuggestedPackagesReporter $suggestedPackagesReporter
      * @return Installer
      */
-    public function setSuggestedPackagesReporter(SuggestedPackagesReporter $suggestedPackagesReporter): Installer
+    public function setSuggestedPackagesReporter(SuggestedPackagesReporter $suggestedPackagesReporter): self
     {
         $this->suggestedPackagesReporter = $suggestedPackagesReporter;
 
