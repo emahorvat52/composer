@@ -322,7 +322,7 @@ class GitHubDriverTest extends TestCase
             ->setConstructorArgs(array($io, $this->config))
             ->getMock();
 
-        $gitHubDriver = new GitHubDriver($repoConfig, $io, $this->config, $httpDownloader, new ProcessExecutorMock);
+        $gitHubDriver = new GitHubDriver($repoConfig, $io, $this->config, $httpDownloader, $this->getProcessExecutorMock());
         $gitHubDriver->initialize();
     }
 
