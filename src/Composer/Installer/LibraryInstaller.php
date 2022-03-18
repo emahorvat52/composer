@@ -154,7 +154,7 @@ class LibraryInstaller implements InstallerInterface, BinaryPresenceInterface
 
         $promise = $this->installCode($package);
         if (!$promise instanceof PromiseInterface) {
-            $promise = \React\Promise\resolve();
+            $promise = \React\Promise\resolve(null);
         }
 
         $binaryInstaller = $this->binaryInstaller;
@@ -182,7 +182,7 @@ class LibraryInstaller implements InstallerInterface, BinaryPresenceInterface
         $this->binaryInstaller->removeBinaries($initial);
         $promise = $this->updateCode($initial, $target);
         if (!$promise instanceof PromiseInterface) {
-            $promise = \React\Promise\resolve();
+            $promise = \React\Promise\resolve(null);
         }
 
         $binaryInstaller = $this->binaryInstaller;
@@ -208,7 +208,7 @@ class LibraryInstaller implements InstallerInterface, BinaryPresenceInterface
 
         $promise = $this->removeCode($package);
         if (!$promise instanceof PromiseInterface) {
-            $promise = \React\Promise\resolve();
+            $promise = \React\Promise\resolve(null);
         }
 
         $binaryInstaller = $this->binaryInstaller;
@@ -297,7 +297,7 @@ class LibraryInstaller implements InstallerInterface, BinaryPresenceInterface
             ) {
                 $promise = $this->removeCode($initial);
                 if (!$promise instanceof PromiseInterface) {
-                    $promise = \React\Promise\resolve();
+                    $promise = \React\Promise\resolve(null);
                 }
 
                 return $promise->then(function () use ($target): PromiseInterface {
@@ -306,7 +306,7 @@ class LibraryInstaller implements InstallerInterface, BinaryPresenceInterface
                         return $promise;
                     }
 
-                    return \React\Promise\resolve();
+                    return \React\Promise\resolve(null);
                 });
             }
 
