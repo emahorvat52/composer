@@ -91,7 +91,7 @@ class AutoloadGenerator
      */
     public function setDevMode($devMode = true)
     {
-        $this->devMode = (bool) $devMode;
+        $this->devMode = $devMode;
     }
 
     /**
@@ -102,7 +102,7 @@ class AutoloadGenerator
      */
     public function setClassMapAuthoritative($classMapAuthoritative)
     {
-        $this->classMapAuthoritative = (bool) $classMapAuthoritative;
+        $this->classMapAuthoritative = $classMapAuthoritative;
     }
 
     /**
@@ -114,8 +114,8 @@ class AutoloadGenerator
      */
     public function setApcu($apcu, $apcuPrefix = null)
     {
-        $this->apcu = (bool) $apcu;
-        $this->apcuPrefix = $apcuPrefix !== null ? (string) $apcuPrefix : $apcuPrefix;
+        $this->apcu = $apcu;
+        $this->apcuPrefix = $apcuPrefix !== null ? $apcuPrefix : $apcuPrefix;
     }
 
     /**
@@ -126,7 +126,7 @@ class AutoloadGenerator
      */
     public function setRunScripts($runScripts = true)
     {
-        $this->runScripts = (bool) $runScripts;
+        $this->runScripts = $runScripts;
     }
 
     /**
@@ -192,7 +192,7 @@ class AutoloadGenerator
             }
 
             $this->eventDispatcher->dispatchScript(ScriptEvents::PRE_AUTOLOAD_DUMP, $this->devMode, array(), array(
-                'optimize' => (bool) $scanPsrPackages,
+                'optimize' => $scanPsrPackages,
             ));
         }
 
