@@ -269,7 +269,11 @@ trait PackageDiscoveryTrait
     private function findBestVersionAndNameForPackage(InputInterface $input, string $name, ?PlatformRepository $platformRepo = null, string $preferredStability = 'stable', ?string $requiredVersion = null, ?string $minimumStability = null, bool $fixed = false): array
     {
         // handle ignore-platform-reqs flag if present
-        $platformRequirementFilter = $this->getPlatformRequirementFilter($input);
+        if ($input->hasOption('ignore-platform-reqs') && $input->hasOption('ignore-platform-req')) {
+            $platformRequirementFilter = $this->getPlatformRequirementFilter($input);
+        } else {
+            $platformRequirementFilter = PlatformRequirementFilterFactory::ignoreNothing();
+        }
 
         // find the latest version allowed in this repo set
         $versionSelector = new VersionSelector($this->getRepositorySet($input, $minimumStability), $platformRepo);
