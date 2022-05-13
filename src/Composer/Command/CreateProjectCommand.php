@@ -160,7 +160,7 @@ EOT
             $preferSource,
             $preferDist,
             !$input->getOption('no-dev'),
-            $input->getOption('repository') ?: $input->getOption('repository-url'),
+            \count($input->getOption('repository')) > 0 ? $input->getOption('repository') : $input->getOption('repository-url'),
             $input->getOption('no-plugins'),
             $input->getOption('no-scripts'),
             $input->getOption('no-progress'),
@@ -198,7 +198,7 @@ EOT
             $repositories = (array) $repositories;
         }
 
-        $platformRequirementFilter = $platformRequirementFilter ?: PlatformRequirementFilterFactory::ignoreNothing();
+        $platformRequirementFilter = $platformRequirementFilter ?? PlatformRequirementFilterFactory::ignoreNothing();
 
         // we need to manually load the configuration to pass the auth credentials to the io interface!
         $io->loadConfiguration($config);
@@ -431,7 +431,7 @@ EOT
             }
         }
 
-        $platformOverrides = $config->get('platform') ?: array();
+        $platformOverrides = $config->get('platform');
         $platformRepo = new PlatformRepository(array(), $platformOverrides);
 
         // find the latest version if there are multiple
