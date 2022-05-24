@@ -233,6 +233,9 @@ EOT
         $repositories = $input->getOption('repository');
         if ($repositories) {
             $config = Factory::createConfig($io);
+            $io->loadConfiguration($config);
+            $repoManager = RepositoryFactory::manager($io, $config);
+
             $repos = array(new PlatformRepository);
             $createDefaultPackagistRepo = true;
             foreach ($repositories as $repo) {
@@ -244,14 +247,14 @@ EOT
                     $createDefaultPackagistRepo = false;
                     continue;
                 }
-                $repos[] = RepositoryFactory::createRepo($io, $config, $repoConfig);
+                $repos[] = RepositoryFactory::createRepo($io, $config, $repoConfig, $repoManager);
             }
 
             if ($createDefaultPackagistRepo) {
                 $repos[] = RepositoryFactory::createRepo($io, $config, array(
                     'type' => 'composer',
                     'url' => 'https://repo.packagist.org',
-                ));
+                ), $repoManager);
             }
 
             $this->repos = new CompositeRepository($repos);

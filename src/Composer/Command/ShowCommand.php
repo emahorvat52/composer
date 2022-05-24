@@ -184,7 +184,7 @@ EOT
                 $repos = new CompositeRepository($composer->getRepositoryManager()->getRepositories());
                 $installedRepo->addRepository($composer->getRepositoryManager()->getLocalRepository());
             } else {
-                $defaultRepos = RepositoryFactory::defaultRepos($io);
+                $defaultRepos = RepositoryFactory::defaultReposWithDefaultManager($io);
                 $repos = new CompositeRepository($defaultRepos);
                 $io->writeError('No composer.json found in the current directory, showing available packages from ' . implode(', ', array_keys($defaultRepos)));
             }
@@ -199,7 +199,7 @@ EOT
             }
             $repos = new CompositeRepository(array_merge(array(new FilterRepository($installedRepo, array('canonical' => false))), $composer->getRepositoryManager()->getRepositories()));
         } elseif ($input->getOption('all')) {
-            $defaultRepos = RepositoryFactory::defaultRepos($io);
+            $defaultRepos = RepositoryFactory::defaultReposWithDefaultManager($io);
             $io->writeError('No composer.json found in the current directory, showing available packages from ' . implode(', ', array_keys($defaultRepos)));
             $installedRepo = new InstalledRepository(array($platformRepo));
             $repos = new CompositeRepository(array_merge(array($installedRepo), $defaultRepos));
