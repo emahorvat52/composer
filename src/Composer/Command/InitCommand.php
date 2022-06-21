@@ -727,7 +727,7 @@ EOT
             explode('/', $packageName)
         );
 
-        return join('\\', $namespace);
+        return implode('\\', $namespace);
     }
 
     /**
