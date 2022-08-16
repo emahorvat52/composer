@@ -416,6 +416,10 @@ class Factory
             $pm = $this->createPluginManager($io, $composer, $globalComposer, $disablePlugins);
             $composer->setPluginManager($pm);
 
+            if (realpath($config->get('home')) === $cwd) {
+                $pm->setRunningInGlobalDir(true);
+            }
+
             $pm->loadInstalledPlugins();
         }
 
