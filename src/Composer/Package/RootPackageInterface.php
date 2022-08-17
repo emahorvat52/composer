@@ -31,8 +31,6 @@ interface RootPackageInterface extends CompletePackageInterface
 
     /**
      * Returns the minimum stability of the package
-     *
-     * @return string
      */
     public function getMinimumStability();
 
@@ -56,8 +54,6 @@ interface RootPackageInterface extends CompletePackageInterface
 
     /**
      * Returns true if the root package prefers picking stable packages over unstable ones
-     *
-     * @return bool
      */
     public function getPreferStable();
 
@@ -72,8 +68,6 @@ interface RootPackageInterface extends CompletePackageInterface
      * Set the required packages
      *
      * @param Link[] $requires A set of package links
-     *
-     * @return void
      */
     public function setRequires(array $requires);
 
@@ -81,8 +75,6 @@ interface RootPackageInterface extends CompletePackageInterface
      * Set the recommended packages
      *
      * @param Link[] $devRequires A set of package links
-     *
-     * @return void
      */
     public function setDevRequires(array $devRequires);
 
@@ -90,8 +82,6 @@ interface RootPackageInterface extends CompletePackageInterface
      * Set the conflicting packages
      *
      * @param Link[] $conflicts A set of package links
-     *
-     * @return void
      */
     public function setConflicts(array $conflicts);
 
@@ -99,8 +89,6 @@ interface RootPackageInterface extends CompletePackageInterface
      * Set the provided virtual packages
      *
      * @param Link[] $provides A set of package links
-     *
-     * @return void
      */
     public function setProvides(array $provides);
 
@@ -108,8 +96,6 @@ interface RootPackageInterface extends CompletePackageInterface
      * Set the packages this one replaces
      *
      * @param Link[] $replaces A set of package links
-     *
-     * @return void
      */
     public function setReplaces(array $replaces);
 
@@ -118,8 +104,6 @@ interface RootPackageInterface extends CompletePackageInterface
      *
      * @param array $autoload Mapping of autoloading rules
      * @phpstan-param AutoloadRules $autoload
-     *
-     * @return void
      */
     public function setAutoload(array $autoload);
 
@@ -128,8 +112,6 @@ interface RootPackageInterface extends CompletePackageInterface
      *
      * @param array $devAutoload Mapping of dev autoloading rules
      * @phpstan-param DevAutoloadRules $devAutoload
-     *
-     * @return void
      */
     public function setDevAutoload(array $devAutoload);
 
@@ -137,26 +119,16 @@ interface RootPackageInterface extends CompletePackageInterface
      * Set the stabilityFlags
      *
      * @param array<string, BasePackage::STABILITY_*> $stabilityFlags
-     *
-     * @return void
      */
     public function setStabilityFlags(array $stabilityFlags);
 
     /**
      * Set the minimumStability
-     *
-     * @param string $minimumStability
-     *
-     * @return void
      */
     public function setMinimumStability(string $minimumStability);
 
     /**
      * Set the preferStable
-     *
-     * @param bool $preferStable
-     *
-     * @return void
      */
     public function setPreferStable(bool $preferStable);
 
@@ -164,8 +136,6 @@ interface RootPackageInterface extends CompletePackageInterface
      * Set the config
      *
      * @param mixed[] $config
-     *
-     * @return void
      */
     public function setConfig(array $config);
 
@@ -173,8 +143,6 @@ interface RootPackageInterface extends CompletePackageInterface
      * Set the references
      *
      * @param array<string, string> $references
-     *
-     * @return void
      */
     public function setReferences(array $references);
 
@@ -182,8 +150,6 @@ interface RootPackageInterface extends CompletePackageInterface
      * Set the aliases
      *
      * @param array<array{package: string, version: string, alias: string, alias_normalized: string}> $aliases
-     *
-     * @return void
      */
     public function setAliases(array $aliases);
 
@@ -191,15 +157,11 @@ interface RootPackageInterface extends CompletePackageInterface
      * Set the suggested packages
      *
      * @param array<string, string> $suggests A set of package names/comments
-     *
-     * @return void
      */
     public function setSuggests(array $suggests);
 
     /**
      * @param mixed[] $extra
-     *
-     * @return void
      */
     public function setExtra(array $extra);
 }
