@@ -547,7 +547,6 @@ class AuthHelperTest extends TestCase
     /**
      * @param array<string, string|null> $auth
      *
-     *
      * @phpstan-param array{username: string|null, password: string|null} $auth
      */
     private function expectsAuthentication($origin, $auth)
