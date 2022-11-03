@@ -95,6 +95,7 @@ class GitHubDriverTest extends TestCase
         $this->assertEquals('test_master', $gitHubDriver->getRootIdentifier());
 
         $dist = $gitHubDriver->getDist($sha);
+        self::assertIsArray($dist);
         $this->assertEquals('zip', $dist['type']);
         $this->assertEquals('https://api.github.com/repos/composer/packagist/zipball/SOMESHA', $dist['url']);
         $this->assertEquals('SOMESHA', $dist['reference']);
@@ -137,6 +138,7 @@ class GitHubDriverTest extends TestCase
         $this->assertEquals('test_master', $gitHubDriver->getRootIdentifier());
 
         $dist = $gitHubDriver->getDist($sha);
+        self::assertIsArray($dist);
         $this->assertEquals('zip', $dist['type']);
         $this->assertEquals('https://api.github.com/repos/composer/packagist/zipball/SOMESHA', $dist['url']);
         $this->assertEquals($sha, $dist['reference']);
@@ -182,6 +184,7 @@ class GitHubDriverTest extends TestCase
         $this->assertEquals('test_master', $gitHubDriver->getRootIdentifier());
 
         $dist = $gitHubDriver->getDist($sha);
+        self::assertIsArray($dist);
         $this->assertEquals('zip', $dist['type']);
         $this->assertEquals('https://api.github.com/repos/composer/packagist/zipball/SOMESHA', $dist['url']);
         $this->assertEquals($sha, $dist['reference']);
@@ -289,6 +292,7 @@ class GitHubDriverTest extends TestCase
         $this->assertEquals('test_master', $gitHubDriver->getRootIdentifier());
 
         $dist = $gitHubDriver->getDist($sha);
+        self::assertIsArray($dist);
         $this->assertEquals('zip', $dist['type']);
         $this->assertEquals('https://api.github.com/repos/composer/packagist/zipball/SOMESHA', $dist['url']);
         $this->assertEquals($sha, $dist['reference']);
