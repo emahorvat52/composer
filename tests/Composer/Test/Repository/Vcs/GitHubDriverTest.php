@@ -333,7 +333,7 @@ class GitHubDriverTest extends TestCase
     /**
      * @return list<array{string}>
      */
-    public function invalidUrlProvider()
+    public static function invalidUrlProvider()
     {
         return array(
             array('https://github.com/acme'),
@@ -357,7 +357,7 @@ class GitHubDriverTest extends TestCase
     /**
      * @return list<array{bool, string}>
      */
-    public function supportsProvider(): array
+    public static function supportsProvider(): array
     {
         return array(
             array(false, 'https://github.com/acme'),
