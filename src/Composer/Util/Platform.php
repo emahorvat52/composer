@@ -274,7 +274,7 @@ class Platform
     /**
      * @return 'NUL'|'/dev/null'
      */
-    public static function getDevNull()
+    public static function getDevNull(): string
     {
         if (self::isWindows()) {
             return 'NUL';

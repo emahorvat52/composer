@@ -385,7 +385,25 @@ class ConfigTest extends TestCase
         $this->assertEquals('COMPOSER_HTACCESS_PROTECT', $result);
     }
 
-    public function testMergesPluginConfig()
+    public function testGetDefaultsToAnEmptyArray(): void
+    {
+        $config = new Config;
+        $keys = [
+            'bitbucket-oauth',
+            'github-oauth',
+            'gitlab-oauth',
+            'gitlab-token',
+            'http-basic',
+            'bearer',
+        ];
+        foreach ($keys as $key) {
+            $value = $config->get($key);
+            $this->assertIsArray($value);
+            $this->assertCount(0, $value);
+        }
+    }
+
+    public function testMergesPluginConfig(): void
     {
         $config = new Config(false);
         $config->merge(['config' => ['allow-plugins' => ['some/plugin' => true]]]);
@@ -395,7 +413,7 @@ class ConfigTest extends TestCase
         $this->assertEquals(['some/plugin' => true, 'another/plugin' => true], $config->get('allow-plugins'));
     }
 
-    public function testOverridesGlobalBooleanPluginsConfig()
+    public function testOverridesGlobalBooleanPluginsConfig(): void
     {
         $config = new Config(false);
         $config->merge(['config' => ['allow-plugins' => true]]);
@@ -405,7 +423,7 @@ class ConfigTest extends TestCase
         $this->assertEquals(['another/plugin' => true], $config->get('allow-plugins'));
     }
 
-    public function testAllowsAllPluginsFromLocalBoolean()
+    public function testAllowsAllPluginsFromLocalBoolean(): void
     {
         $config = new Config(false);
         $config->merge(['config' => ['allow-plugins' => ['some/plugin' => true]]]);

@@ -39,14 +39,11 @@ trait PackageDiscoveryTrait
     /** @var RepositorySet[] */
     private $repositorySets;
 
-    /**
-     * @return CompositeRepository
-     */
     protected function getRepos(): CompositeRepository
     {
         if (null === $this->repos) {
             $this->repos = new CompositeRepository(array_merge(
-                array(new PlatformRepository),
+                [new PlatformRepository],
                 RepositoryFactory::defaultReposWithDefaultManager($this->getIO())
             ));
         }
@@ -89,33 +86,35 @@ trait PackageDiscoveryTrait
      * @return array<string>
      * @throws \Exception
      */
-    final protected function determineRequirements(InputInterface $input, OutputInterface $output, array $requires = array(), ?PlatformRepository $platformRepo = null, string $preferredStability = 'stable', bool $checkProvidedVersions = true, bool $fixed = false): array
+    final protected function determineRequirements(InputInterface $input, OutputInterface $output, array $requires = [], ?PlatformRepository $platformRepo = null, string $preferredStability = 'stable', bool $useBestVersionConstraint = true, bool $fixed = false): array
     {
         if (count($requires) > 0) {
             $requires = $this->normalizeRequirements($requires);
-            $result = array();
+            $result = [];
             $io = $this->getIO();
 
             foreach ($requires as $requirement) {
+                if (isset($requirement['version']) && Preg::isMatch('{^\d+(\.\d+)?$}', $requirement['version'])) {
+                    $io->writeError('<warning>The "'.$requirement['version'].'" constraint for "'.$requirement['name'].'" appears too strict and will likely not match what you want. See https://getcomposer.org/constraints');
+                }
+
                 if (!isset($requirement['version'])) {
                     // determine the best version automatically
-                    list($name, $version) = $this->findBestVersionAndNameForPackage($input, $requirement['name'], $platformRepo, $preferredStability, null, null, $fixed);
-                    $requirement['version'] = $version;
+                    [$name, $version] = $this->findBestVersionAndNameForPackage($input, $requirement['name'], $platformRepo, $preferredStability, $fixed);
 
                     // replace package name from packagist.org
                     $requirement['name'] = $name;
 
-                    $io->writeError(sprintf(
-                        'Using version <info>%s</info> for <info>%s</info>',
-                        $requirement['version'],
-                        $requirement['name']
-                    ));
-                } else {
-                    // check that the specified version/constraint exists before we proceed
-                    list($name) = $this->findBestVersionAndNameForPackage($input, $requirement['name'], $platformRepo, $preferredStability, $checkProvidedVersions ? $requirement['version'] : null, 'dev', $fixed);
-
-                    // replace package name from packagist.org
-                    $requirement['name'] = $name;
+                    if ($useBestVersionConstraint) {
+                        $requirement['version'] = $version;
+                        $io->writeError(sprintf(
+                            'Using version <info>%s</info> for <info>%s</info>',
+                            $requirement['version'],
+                            $requirement['name']
+                        ));
+                    } else {
+                        $requirement['version'] = 'guess';
+                    }
                 }
 
                 $result[] = $requirement['name'] . ' ' . $requirement['version'];
@@ -132,7 +131,7 @@ trait PackageDiscoveryTrait
         if (null !== $composer) {
             $installedRepo = $composer->getRepositoryManager()->getLocalRepository();
         }
-        $existingPackages = array();
+        $existingPackages = [];
         if (null !== $installedRepo) {
             foreach ($installedRepo->getPackages() as $package) {
                 $existingPackages[] = $package->getName();
@@ -154,20 +153,8 @@ trait PackageDiscoveryTrait
                 $matches = array_values($matches);
 
                 $exactMatch = false;
-                $choices = array();
-                foreach ($matches as $position => $foundPackage) {
-                    $abandoned = '';
-                    if (isset($foundPackage['abandoned'])) {
-                        if (is_string($foundPackage['abandoned'])) {
-                            $replacement = sprintf('Use %s instead', $foundPackage['abandoned']);
-                        } else {
-                            $replacement = 'No replacement was suggested';
-                        }
-                        $abandoned = sprintf('<warning>Abandoned. %s.</warning>', $replacement);
-                    }
-
-                    $choices[] = sprintf(' <info>%5s</info> %s %s', "[$position]", $foundPackage['name'], $abandoned);
-                    if ($foundPackage['name'] === $package) {
+                foreach ($matches as $match) {
+                    if ($match['name'] === $package) {
                         $exactMatch = true;
                         break;
                     }
@@ -175,16 +162,36 @@ trait PackageDiscoveryTrait
 
                 // no match, prompt which to pick
                 if (!$exactMatch) {
-                    $io->writeError(array(
+                    $providers = $this->getRepos()->getProviders($package);
+                    if (count($providers) > 0) {
+                        array_unshift($matches, ['name' => $package, 'description' => '']);
+                    }
+
+                    $choices = [];
+                    foreach ($matches as $position => $foundPackage) {
+                        $abandoned = '';
+                        if (isset($foundPackage['abandoned'])) {
+                            if (is_string($foundPackage['abandoned'])) {
+                                $replacement = sprintf('Use %s instead', $foundPackage['abandoned']);
+                            } else {
+                                $replacement = 'No replacement was suggested';
+                            }
+                            $abandoned = sprintf('<warning>Abandoned. %s.</warning>', $replacement);
+                        }
+
+                        $choices[] = sprintf(' <info>%5s</info> %s %s', "[$position]", $foundPackage['name'], $abandoned);
+                    }
+
+                    $io->writeError([
                         '',
                         sprintf('Found <info>%s</info> packages matching <info>%s</info>', count($matches), $package),
                         '',
-                    ));
+                    ]);
 
                     $io->writeError($choices);
                     $io->writeError('');
 
-                    $validator = function (string $selection) use ($matches, $versionParser) {
+                    $validator = static function (string $selection) use ($matches, $versionParser) {
                         if ('' === $selection) {
                             return false;
                         }
@@ -222,7 +229,7 @@ trait PackageDiscoveryTrait
 
                 // no constraint yet, determine the best version automatically
                 if (false !== $package && false === strpos($package, ' ')) {
-                    $validator = function (string $input) {
+                    $validator = static function (string $input) {
                         $input = trim($input);
 
                         return strlen($input) > 0 ? $input : false;
@@ -236,7 +243,7 @@ trait PackageDiscoveryTrait
                     );
 
                     if (false === $constraint) {
-                        list(, $constraint) = $this->findBestVersionAndNameForPackage($input, $package, $platformRepo, $preferredStability);
+                        [, $constraint] = $this->findBestVersionAndNameForPackage($input, $package, $platformRepo, $preferredStability);
 
                         $io->writeError(sprintf(
                             'Using version <info>%s</info> for <info>%s</info>',
@@ -266,7 +273,7 @@ trait PackageDiscoveryTrait
      * @throws \InvalidArgumentException
      * @return array{string, string}     name version
      */
-    private function findBestVersionAndNameForPackage(InputInterface $input, string $name, ?PlatformRepository $platformRepo = null, string $preferredStability = 'stable', ?string $requiredVersion = null, ?string $minimumStability = null, bool $fixed = false): array
+    private function findBestVersionAndNameForPackage(InputInterface $input, string $name, ?PlatformRepository $platformRepo = null, string $preferredStability = 'stable', bool $fixed = false): array
     {
         // handle ignore-platform-reqs flag if present
         if ($input->hasOption('ignore-platform-reqs') && $input->hasOption('ignore-platform-req')) {
@@ -276,30 +283,46 @@ trait PackageDiscoveryTrait
         }
 
         // find the latest version allowed in this repo set
-        $versionSelector = new VersionSelector($this->getRepositorySet($input, $minimumStability), $platformRepo);
-        $effectiveMinimumStability = $minimumStability ?? $this->getMinimumStability($input);
+        $repoSet = $this->getRepositorySet($input);
+        $versionSelector = new VersionSelector($repoSet, $platformRepo);
+        $effectiveMinimumStability = $this->getMinimumStability($input);
 
-        $package = $versionSelector->findBestCandidate($name, $requiredVersion, $preferredStability, $platformRequirementFilter);
+        $package = $versionSelector->findBestCandidate($name, null, $preferredStability, $platformRequirementFilter, 0, $this->getIO());
 
         if (false === $package) {
             // platform packages can not be found in the pool in versions other than the local platform's has
             // so if platform reqs are ignored we just take the user's word for it
             if ($platformRequirementFilter->isIgnored($name)) {
-                return array($name, $requiredVersion ?: '*');
+                return [$name, '*'];
+            }
+
+            // Check if it is a virtual package provided by others
+            $providers = $repoSet->getProviders($name);
+            if (count($providers) > 0) {
+                $constraint = '*';
+                if ($input->isInteractive()) {
+                    $constraint = $this->getIO()->askAndValidate('Package "<info>'.$name.'</info>" does not exist but is provided by '.count($providers).' packages. Which version constraint would you like to use? [<info>*</info>] ', static function ($value) {
+                        $parser = new VersionParser();
+                        $parser->parseConstraints($value);
+
+                        return $value;
+                    }, 3, '*');
+                }
+
+                return [$name, $constraint];
             }
 
             // Check whether the package requirements were the problem
-            if (!($platformRequirementFilter instanceof IgnoreAllPlatformRequirementFilter) && false !== ($candidate = $versionSelector->findBestCandidate($name, $requiredVersion, $preferredStability, PlatformRequirementFilterFactory::ignoreAll()))) {
+            if (!($platformRequirementFilter instanceof IgnoreAllPlatformRequirementFilter) && false !== ($candidate = $versionSelector->findBestCandidate($name, null, $preferredStability, PlatformRequirementFilterFactory::ignoreAll()))) {
                 throw new \InvalidArgumentException(sprintf(
-                    'Package %s%s has requirements incompatible with your PHP version, PHP extensions and Composer version' . $this->getPlatformExceptionDetails($candidate, $platformRepo),
-                    $name,
-                    is_string($requiredVersion) ? ' at version '.$requiredVersion : ''
+                    'Package %s has requirements incompatible with your PHP version, PHP extensions and Composer version' . $this->getPlatformExceptionDetails($candidate, $platformRepo),
+                    $name
                 ));
             }
             // Check whether the minimum stability was the problem but the package exists
-            if (false !== ($package = $versionSelector->findBestCandidate($name, $requiredVersion, $preferredStability, $platformRequirementFilter, RepositorySet::ALLOW_UNACCEPTABLE_STABILITIES))) {
+            if (false !== ($package = $versionSelector->findBestCandidate($name, null, $preferredStability, $platformRequirementFilter, RepositorySet::ALLOW_UNACCEPTABLE_STABILITIES))) {
                 // we must first verify if a valid package would be found in a lower priority repository
-                if (false !== ($allReposPackage = $versionSelector->findBestCandidate($name, $requiredVersion, $preferredStability, $platformRequirementFilter, RepositorySet::ALLOW_SHADOWED_REPOSITORIES))) {
+                if (false !== ($allReposPackage = $versionSelector->findBestCandidate($name, null, $preferredStability, $platformRequirementFilter, RepositorySet::ALLOW_SHADOWED_REPOSITORIES))) {
                     throw new \InvalidArgumentException(
                         'Package '.$name.' exists in '.$allReposPackage->getRepository()->getRepoName().' and '.$package->getRepository()->getRepoName().' which has a higher repository priority. The packages from the higher priority repository do not match your minimum-stability and are therefore not installable. That repository is canonical so the lower priority repo\'s packages are not installable. See https://getcomposer.org/repoprio for details and assistance.'
                     );
@@ -309,21 +332,6 @@ trait PackageDiscoveryTrait
                     'Could not find a version of package %s matching your minimum-stability (%s). Require it with an explicit version constraint allowing its desired stability.',
                     $name,
                     $effectiveMinimumStability
-                ));
-            }
-            // Check whether the required version was the problem
-            if (is_string($requiredVersion) && false !== ($package = $versionSelector->findBestCandidate($name, null, $preferredStability, $platformRequirementFilter))) {
-                // we must first verify if a valid package would be found in a lower priority repository
-                if (false !== ($allReposPackage = $versionSelector->findBestCandidate($name, $requiredVersion, $preferredStability, PlatformRequirementFilterFactory::ignoreNothing(), RepositorySet::ALLOW_SHADOWED_REPOSITORIES))) {
-                    throw new \InvalidArgumentException(
-                        'Package '.$name.' exists in '.$allReposPackage->getRepository()->getRepoName().' and '.$package->getRepository()->getRepoName().' which has a higher repository priority. The packages from the higher priority repository do not match your constraint and are therefore not installable. That repository is canonical so the lower priority repo\'s packages are not installable. See https://getcomposer.org/repoprio for details and assistance.'
-                    );
-                }
-
-                throw new \InvalidArgumentException(sprintf(
-                    'Could not find package %s in a version matching "%s" and a stability matching "'.$effectiveMinimumStability.'".',
-                    $name,
-                    $requiredVersion
                 ));
             }
             // Check whether the PHP version was the problem for all versions
@@ -364,10 +372,10 @@ trait PackageDiscoveryTrait
             ));
         }
 
-        return array(
+        return [
             $package->getPrettyName(),
             $fixed ? $package->getPrettyVersion() : $versionSelector->findRecommendedRequireVersion($package),
-        );
+        ];
     }
 
     /**
@@ -386,9 +394,9 @@ trait PackageDiscoveryTrait
             }
 
             // ignore search errors
-            return array();
+            return [];
         }
-        $similarPackages = array();
+        $similarPackages = [];
 
         $installedRepo = $this->requireComposer()->getRepositoryManager()->getLocalRepository();
 
@@ -406,7 +414,7 @@ trait PackageDiscoveryTrait
 
     private function getPlatformExceptionDetails(PackageInterface $candidate, ?PlatformRepository $platformRepo = null): string
     {
-        $details = array();
+        $details = [];
         if (null === $platformRepo) {
             return '';
         }
